@@ -1,4 +1,4 @@
-# React Native + Expo + Typescript
+# React Native expo + Typescript
 
 ## Setup and Run Instructions
 
