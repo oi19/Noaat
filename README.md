@@ -84,18 +84,18 @@ To learn more about React Native, take a look at the following resources:
 
 ## React Native Expo 
 
-- [React Native Website](https://expo.dev/) - learn more about React Native expo.
+- [React Native expo Website](https://expo.dev/) - learn more about React Native expo.
 - [Getting Started](https://docs.expo.dev/get-started/installation/) - an **overview** of React Native expo and how setup your environment.
 - [Learn the Basics](https://docs.expo.dev/tutorial/introduction/) - a **guided tour** of the React Native expo **basics**.
-- [Blog](https://blog.expo.dev/) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/expo/expo) - the Open Source; GitHub **repository** for React Native.
+- [Blog](https://blog.expo.dev/) - read the latest official React Native expo **Blog** posts.
+- [`expo`](https://github.com/expo/expo) - the Open Source; GitHub **repository** for React Native.
 
 ## React Native Cli
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native CLI.
+- [React Native ClI Website](https://reactnative.dev) - learn more about React Native CLI.
 - [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
+- [Blog](https://reactnative.dev/blog) - read the latest official React Native CLI **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
 
 
