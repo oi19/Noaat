@@ -7,14 +7,16 @@
 - **Node.js**: Ensure that Node.js is installed on your machine. You can download it from [here](https://nodejs.org/).
 - **Expo CLI**: Install Expo CLI globally using npm or yarn:
   
-```shell script
 
+```shell script
+# using npm
 npm install -g expo-cli
-
 ```
-OR
 
+  OR
+  
 ```shell script
+# using yarn
 yarn global add expo-cli
 ```
 
@@ -40,12 +42,14 @@ cd Noaat
 3. Install Dependencies: Install project dependencies using npm or yarn:
 
 ```shell script
+# using npm
 npm install 
 ```
 
   OR
   
 ```shell script
+# using yarn
 yarn install
 ```
 
@@ -79,7 +83,6 @@ yarn start
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
 
-### For Android
 
 ```bash
 # using npm
@@ -89,15 +92,6 @@ npm run android
 yarn android
 ```
 
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
 
 ## Congratulations! :tada:
 
@@ -120,9 +114,7 @@ To learn more about React Native, take a look at the following resources:
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
 
-  
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+  If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
 
 This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
 
@@ -135,9 +127,8 @@ Now that you have successfully run the app, let's modify it.
 
    For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
 
-## Congratulations! :tada:
 
-You've successfully run and modified your React Native App. :partying_face:
+
 
 
 
