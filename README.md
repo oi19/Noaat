@@ -46,7 +46,7 @@ npm install
   OR
   
 ```shell script
-npm install
+yarn install
 ```
 
 4. Start Expo Metro Bundler: Start the Expo Metro Bundler:
