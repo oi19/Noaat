@@ -38,6 +38,12 @@ cd Noaat
 npm install 
 ```
 
+  OR
+  
+```shell script
+# using yarn
+yarn install
+```
 ### Expo Go App
 
 Install Expo Go: Install the Expo Go app on your iOS or Android device. You can download it from the [App Store](https://apps.apple.com/us/app/expo-go/id982107779) or [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en&gl=US).
