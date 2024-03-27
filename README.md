@@ -19,19 +19,19 @@ npm install -g expo-cli
 # using yarn
 yarn global add expo-cli
 ```
-- **Clone the Repository**: Clone the project repository to your local machine using Git:
+- Clone the Repository**: Clone the project repository to your local machine using Git:
 
 ```shell script
 git clone <https://github.com/oi19/Noaat.git>
 ```
    
-- **Navigate to Project Directory: Change your current directory to the project folder:
+- Navigate to Project Directory: Change your current directory to the project folder:
    
 ```shell script
 cd Noaat
 ```
    
-- **Install Dependencies: Install project dependencies using npm or yarn:
+- Install Dependencies: Install project dependencies using npm or yarn:
 
 ```shell script
 # using npm
