@@ -101,7 +101,18 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
 
   const onCancelButtonPressed = () => {
     Keyboard.dismiss()
+    checkPreviousData()
     onCancel()
+  }
+
+  const checkPreviousData = () => {
+    const previousData = {
+      description: questionAnswer?.description ?? "",
+      tags: questionAnswer?.tags ?? [],
+    }
+    setSelectedTags(previousData.tags)
+    setValue("tags", previousData?.tags)
+    setValue("review", previousData.description)
   }
 
   const _renderTagsList = () => {
