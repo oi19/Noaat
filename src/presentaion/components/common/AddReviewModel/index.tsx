@@ -1,5 +1,4 @@
-import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import React, { RefObject, useEffect } from "react"
+import React, { RefObject, useEffect, useState } from "react"
 import {
   View,
   LayoutAnimation,
@@ -8,7 +7,7 @@ import {
   TouchableOpacity,
   Keyboard,
 } from "react-native"
-
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { translate } from "../../../../shared/helpers/language"
 import { Colors, Spacing } from "../../../../shared/styles"
 import { scale } from "../../../../shared/styles/dimensions"
@@ -17,13 +16,13 @@ import Text from "../../shared/Text/Text"
 import { ControlledInput } from "../../shared/Input/Input"
 import BaseModal from "../BaseModal/BaseModal"
 import { styles } from "./styles"
-import { Tag, taglist } from "./data"
-import { FS14 } from "../../../../shared/styles/typography"
+import { taglist as data } from "./data"
 import { selectedAnswerBodyProps } from "../../../screens/ServeyScreen/ServeyScreen"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { ReviewSchema } from "../../../../shared/helpers/validationSchema"
+import TagList from "../TagList/TagList"
 
 type AddReviewModelModelProps = {
   forwardRef: RefObject<BottomSheetModal>
@@ -43,19 +42,13 @@ if (
 const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   forwardRef,
   questionAnswer,
-  isReset,
   onCompletion,
   onCancel,
 }) => {
-  const [selectedTags, setSelectedTags] = React.useState<number[]>(
-    questionAnswer?.tags ?? []
-  )
-  const [isTagErrorVisible, setTagErrorVisible] = React.useState<boolean>(false)
-  const [isTextInputVisible, setTextInputVisible] =
-    React.useState<boolean>(false)
-  const [snapPoints, setSnapPoints] = React.useState<Array<number | string>>([
-    "50%",
-  ])
+  const [selectedTags, setSelectedTags] = useState<number[]>([])
+  const [isTagErrorVisible, setTagErrorVisible] = useState<boolean>(false)
+  const [isTextInputVisible, setTextInputVisible] = useState<boolean>(false)
+  const [snapPoints, setSnapPoints] = useState<Array<number | string>>(["50%"])
 
   const { control, setValue, getValues, clearErrors, reset } = useForm({
     resolver: yupResolver(ReviewSchema),
@@ -72,15 +65,9 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     setValue("review", questionAnswer?.description ?? "")
   }, [questionAnswer])
 
-  const handleTagPress = (id: number) => {
+  const handleTagPress = (filteredSelectedTags: number[]) => {
     clearErrors("tags")
     setTagErrorVisible(false)
-    let filteredSelectedTags: number[]
-    if (!selectedTags.includes(id)) {
-      filteredSelectedTags = [...selectedTags, id]
-    } else {
-      filteredSelectedTags = selectedTags.filter((tagId) => tagId !== id)
-    }
     setSelectedTags(filteredSelectedTags)
     setValue("tags", filteredSelectedTags)
   }
@@ -114,9 +101,7 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     Keyboard.dismiss()
     setTagErrorVisible(false)
     checkPreviousData()
-    // setTimeout(() => {
     onCancel()
-    // }, 300)
   }
 
   const checkPreviousData = () => {
@@ -124,53 +109,10 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
       selectedTags?.length == 0 ||
       questionAnswer?.tags === undefined ||
       questionAnswer?.tags?.length == 0
-    // console.warn(clearSelectedTags)
     if (clearSelectedTags) {
       setSelectedTags([])
       reset()
     }
-  }
-
-  const _renderTagsList = () => {
-    return (
-      <View style={styles.tagsListContainer}>
-        {taglist.map((tag: Tag) => (
-          <TouchableOpacity
-            key={"tageItem" + tag.id}
-            style={[
-              styles.tag,
-              {
-                backgroundColor: selectedTags?.includes(tag.id)
-                  ? Colors.PRIMARY
-                  : Colors.PRIMARY_1,
-              },
-            ]}
-            onPress={() => handleTagPress(tag.id)}
-          >
-            <Text
-              style={{
-                color: selectedTags?.includes(tag.id)
-                  ? Colors.WHITE
-                  : Colors.BLACK,
-                marginEnd: Spacing.S4,
-              }}
-            >
-              {selectedTags?.includes(tag.id) ? "-" : "+"}
-            </Text>
-            <Text
-              style={{
-                fontSize: FS14,
-                color: selectedTags?.includes(tag.id)
-                  ? Colors.WHITE
-                  : Colors.BLACK,
-              }}
-            >
-              {tag.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    )
   }
 
   return (
@@ -203,14 +145,12 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
               onPress={onCancelButtonPressed}
             />
           </View>
-          {/* Render content only if questionAnswer is defined */}
-          {isTagErrorVisible ? (
-            <Text style={{ marginStart: Spacing.S20 }} color="RED">
-              at least 1 tag is required
-            </Text>
-          ) : null}
-
-          {_renderTagsList()}
+          <TagList
+            data={data}
+            selectedTags={selectedTags}
+            onSelectTags={handleTagPress}
+            isTagErrorVisible={isTagErrorVisible}
+          />
           {!isTextInputVisible ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <TouchableOpacity onPress={toggleTextInput}>

@@ -79,14 +79,14 @@ const ServeyItem: React.FC<serveyItemProps> = ({
     )
     setTimeout(() => {
       closeReviewModal()
-    }, 100)
+    }, 200)
   }
 
   const onCancel = () => {
     setSelectedAnswerIndex(previousAnswerIndex) // Restore the previous index on cancellation
     setTimeout(() => {
       closeReviewModal()
-    }, 500)
+    }, 200)
   }
 
   const _renderAnswerButton = (
@@ -149,10 +149,7 @@ const ServeyItem: React.FC<serveyItemProps> = ({
         return _renderAnswerButton(answerButtonItem, index)
       })}
       <AddReviewModel
-        // key={"reivewModal key" + questionIndex}
-        key={`${questionIndex}-${
-          questionAnswer ? Object.keys(questionAnswer)?.length : questionIndex
-        }`} // Guard against questionAnswer being undefined
+        key={"reivewModal key" + questionIndex}
         onCancel={onCancel}
         questionAnswer={questionAnswer}
         onCompletion={onSubmitReview}

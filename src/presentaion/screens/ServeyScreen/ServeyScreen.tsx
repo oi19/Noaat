@@ -51,11 +51,10 @@ const ServeyScreen: React.FC = () => {
     }, 300)
   }
 
-  const onSubmitReview = (onCompletion?) => {
+  const onSubmitReview = (onCompletion?: () => void) => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-      onCompletion()
       openSuccessModal()
     }, 300)
   }
