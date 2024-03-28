@@ -14,7 +14,7 @@ interface ServeyListProps {
   forwardRef: RefObject<FlatList>
   currentIndex: number
   answers: any
-  onCompletion: (isLastItem: boolean, answer: selectedAnswerProps) => void
+  onCompletion: (isLastItem: boolean, answer: selectedAnswerProps,lastItemHandler) => void
 }
 
 const ServeyList: React.FC<ServeyListProps> = ({

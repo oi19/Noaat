@@ -60,12 +60,17 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   const { control, setValue, getValues, clearErrors, reset } = useForm({
     resolver: yupResolver(ReviewSchema),
     defaultValues: {
-      review: isReset ? "" : questionAnswer?.description,
-      tags: isReset ? [] : questionAnswer?.tags,
+      review: questionAnswer?.description ?? "",
+      tags: questionAnswer?.tags ?? [],
     },
   })
 
-  console.warn(getValues())
+  useEffect(() => {
+    console.log(questionAnswer)
+    setSelectedTags(questionAnswer?.tags ?? [])
+    setValue("tags", questionAnswer?.tags ?? [])
+    setValue("review", questionAnswer?.description ?? "")
+  }, [questionAnswer])
 
   const handleTagPress = (id: number) => {
     clearErrors("tags")
@@ -89,9 +94,10 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
 
   const onSendReview = () => {
     if (validate()) {
+      console.log(getValues())
       onCompletion({
-        description: getValues["review"],
-        tags: getValues["tags"],
+        description: getValues("review"),
+        tags: getValues("tags"),
       })
     }
   }
@@ -108,13 +114,21 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     Keyboard.dismiss()
     setTagErrorVisible(false)
     checkPreviousData()
+    // setTimeout(() => {
     onCancel()
+    // }, 300)
   }
 
   const checkPreviousData = () => {
-    setSelectedTags(questionAnswer?.tags ?? [])
-    setValue("tags", questionAnswer?.tags ?? [])
-    setValue("review", questionAnswer?.description ?? "")
+    const clearSelectedTags =
+      selectedTags?.length == 0 ||
+      questionAnswer?.tags === undefined ||
+      questionAnswer?.tags?.length == 0
+    // console.warn(clearSelectedTags)
+    if (clearSelectedTags) {
+      setSelectedTags([])
+      reset()
+    }
   }
 
   const _renderTagsList = () => {
@@ -126,7 +140,7 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
             style={[
               styles.tag,
               {
-                backgroundColor: selectedTags.includes(tag.id)
+                backgroundColor: selectedTags?.includes(tag.id)
                   ? Colors.PRIMARY
                   : Colors.PRIMARY_1,
               },
@@ -135,18 +149,18 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
           >
             <Text
               style={{
-                color: selectedTags.includes(tag.id)
+                color: selectedTags?.includes(tag.id)
                   ? Colors.WHITE
                   : Colors.BLACK,
                 marginEnd: Spacing.S4,
               }}
             >
-              {selectedTags.includes(tag.id) ? "-" : "+"}
+              {selectedTags?.includes(tag.id) ? "-" : "+"}
             </Text>
             <Text
               style={{
                 fontSize: FS14,
-                color: selectedTags.includes(tag.id)
+                color: selectedTags?.includes(tag.id)
                   ? Colors.WHITE
                   : Colors.BLACK,
               }}
@@ -189,6 +203,7 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
               onPress={onCancelButtonPressed}
             />
           </View>
+          {/* Render content only if questionAnswer is defined */}
           {isTagErrorVisible ? (
             <Text style={{ marginStart: Spacing.S20 }} color="RED">
               at least 1 tag is required
@@ -232,5 +247,4 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     </BaseModal>
   )
 }
-
 export default AddReviewModel

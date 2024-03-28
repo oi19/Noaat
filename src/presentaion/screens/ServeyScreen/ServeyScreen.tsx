@@ -45,26 +45,28 @@ const ServeyScreen: React.FC = () => {
 
   const closeSuccessModal = () => {
     setCurrentIndex(0)
-    // setAnswers({})
+    setAnswers({})
     setTimeout(() => {
       successModelRef.current.close()
     }, 300)
   }
 
-  const onSubmitReview = () => {
+  const onSubmitReview = (onCompletion?) => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
+      onCompletion()
       openSuccessModal()
     }, 300)
   }
 
   const onAnswerButtonPressed = (
     isLastItem: boolean,
-    currentAnswer: selectedAnswerProps
+    currentAnswer: selectedAnswerProps,
+    lastItemHandler: () => void
   ) => {
     if (isLastItem) {
-      onSubmitReview()
+      onSubmitReview(lastItemHandler)
     } else {
       setCurrentIndex(currentIndex + 1)
     }
