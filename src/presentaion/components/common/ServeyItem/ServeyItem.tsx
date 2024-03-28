@@ -58,23 +58,22 @@ const ServeyItem: React.FC<serveyItemProps> = ({
   }
 
   const onSubmitReview = (review: selectedAnswerBodyProps | null) => {
-    closeReviewModal()
-
+    onCompletion(isLastItem, {
+      [questionIndex]: {
+        answerId: selectedAnswerIndex,
+        ...review,
+      },
+    })
     setTimeout(() => {
-      onCompletion(isLastItem, {
-        [questionIndex]: {
-          answerId: selectedAnswerIndex,
-          ...review,
-        },
-      })
-    }, 300)
+      closeReviewModal()
+    }, 100)
   }
 
   const onCancel = () => {
     setSelectedAnswerIndex(previousAnswerIndex) // Restore the previous index on cancellation
     setTimeout(() => {
       closeReviewModal()
-    }, 200)
+    }, 300)
   }
 
   const _renderAnswerButton = (
@@ -137,14 +136,15 @@ const ServeyItem: React.FC<serveyItemProps> = ({
         return _renderAnswerButton(answerButtonItem, index)
       })}
       <AddReviewModel
+        // key={"reivewModal key" + questionIndex}
         key={`${questionIndex}-${
-          questionAnswer ? Object.keys(questionAnswer).length : questionIndex
+          questionAnswer ? Object.keys(questionAnswer)?.length : questionIndex
         }`} // Guard against questionAnswer being undefined
         onCancel={onCancel}
         questionAnswer={questionAnswer}
         onCompletion={onSubmitReview}
         forwardRef={reviewModalRef}
-        isReset={selectedAnswerIndex === 0 || selectedAnswerIndex === 1}
+        isReset={selectedAnswerIndex !== 0 && selectedAnswerIndex !== 1}
       />
     </ScrollView>
   )

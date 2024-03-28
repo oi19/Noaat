@@ -1,4 +1,4 @@
-import { BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject, useEffect } from "react"
 import {
   View,
@@ -43,10 +43,13 @@ if (
 const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   forwardRef,
   questionAnswer,
+  isReset,
   onCompletion,
   onCancel,
 }) => {
-  const [selectedTags, setSelectedTags] = React.useState<number[]>([])
+  const [selectedTags, setSelectedTags] = React.useState<number[]>(
+    questionAnswer?.tags ?? []
+  )
   const [isTagErrorVisible, setTagErrorVisible] = React.useState<boolean>(false)
   const [isTextInputVisible, setTextInputVisible] =
     React.useState<boolean>(false)
@@ -54,13 +57,15 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     "50%",
   ])
 
-  const { control, setValue, getValues, clearErrors } = useForm({
+  const { control, setValue, getValues, clearErrors, reset } = useForm({
     resolver: yupResolver(ReviewSchema),
     defaultValues: {
-      review: questionAnswer?.description ?? "",
-      tags: questionAnswer?.tags ?? [],
+      review: isReset ? "" : questionAnswer?.description,
+      tags: isReset ? [] : questionAnswer?.tags,
     },
   })
+
+  console.warn(getValues())
 
   const handleTagPress = (id: number) => {
     clearErrors("tags")
@@ -107,13 +112,9 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   }
 
   const checkPreviousData = () => {
-    const previousData = {
-      description: questionAnswer?.description ?? "",
-      tags: questionAnswer?.tags ?? [],
-    }
-    setSelectedTags(previousData.tags)
-    setValue("tags", previousData?.tags)
-    setValue("review", previousData.description)
+    setSelectedTags(questionAnswer?.tags ?? [])
+    setValue("tags", questionAnswer?.tags ?? [])
+    setValue("review", questionAnswer?.description ?? "")
   }
 
   const _renderTagsList = () => {
@@ -121,7 +122,7 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
       <View style={styles.tagsListContainer}>
         {taglist.map((tag: Tag) => (
           <TouchableOpacity
-            key={tag.id}
+            key={"tageItem" + tag.id}
             style={[
               styles.tag,
               {

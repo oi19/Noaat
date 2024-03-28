@@ -20,7 +20,6 @@ interface ServeyListProps {
 const ServeyList: React.FC<ServeyListProps> = ({
   questionList,
   forwardRef,
-  currentIndex,
   answers,
   onCompletion,
 }) => {
@@ -40,14 +39,6 @@ const ServeyList: React.FC<ServeyListProps> = ({
 
   return (
     <View style={{ marginTop: 20 }}>
-      <View style={{ margin: Spacing.S20 }}>
-        <ProgressBar
-          type="segmented"
-          currentStep={currentIndex + 1}
-          totalSteps={questionList.length}
-        />
-      </View>
-
       <FlatList
         ref={forwardRef}
         data={questionList}

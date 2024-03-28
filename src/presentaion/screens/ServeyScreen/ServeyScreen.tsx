@@ -14,6 +14,8 @@ import { data } from "../../../mock/serveyQuestions.json"
 import SuccessModel from "../../components/common/SuccessModal/SuccessModal"
 import BlurProgressView from "../../components/common/blur-activity-indicator/BlurProgressView"
 import { postPromise } from "../../../infrastructure/api/api"
+import ProgressBar from "../../components/shared/ProgressBar/ProgressBar"
+import { Spacing } from "../../../shared/styles"
 
 export interface selectedAnswerBodyProps {
   answerId: number
@@ -61,12 +63,12 @@ const ServeyScreen: React.FC = () => {
     isLastItem: boolean,
     currentAnswer: selectedAnswerProps
   ) => {
-    setAnswers({ ...answers, ...currentAnswer })
     if (isLastItem) {
       onSubmitReview()
     } else {
       setCurrentIndex(currentIndex + 1)
     }
+    setAnswers({ ...answers, ...currentAnswer })
   }
 
   React.useEffect(() => {
@@ -88,6 +90,14 @@ const ServeyScreen: React.FC = () => {
           }
         }}
       />
+      <View style={{ margin: Spacing.S20 }}>
+        <ProgressBar
+          type="segmented"
+          currentStep={currentIndex + 1}
+          totalSteps={data.length}
+        />
+      </View>
+
       <ServeyList
         forwardRef={flatListRef}
         questionList={data}
