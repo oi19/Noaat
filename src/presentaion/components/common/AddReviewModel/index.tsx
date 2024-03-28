@@ -101,6 +101,7 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
 
   const onCancelButtonPressed = () => {
     Keyboard.dismiss()
+    setTagErrorVisible(false)
     checkPreviousData()
     onCancel()
   }
