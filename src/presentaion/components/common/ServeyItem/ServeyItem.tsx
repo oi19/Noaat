@@ -66,19 +66,20 @@ const ServeyItem: React.FC<serveyItemProps> = ({
   }
 
   const onSubmitReview = (review: selectedAnswerBodyProps | null) => {
+    closeReviewModal()
     console.log(review)
-    onCompletion(
-      isLastItem,
-      {
-        [questionIndex]: {
-          answerId: selectedAnswerIndex,
-          ...review,
-        },
-      },
-      () => setSelectedAnswerIndex(-1)
-    )
+
     setTimeout(() => {
-      closeReviewModal()
+      onCompletion(
+        isLastItem,
+        {
+          [questionIndex]: {
+            answerId: selectedAnswerIndex,
+            ...review,
+          },
+        },
+        () => setSelectedAnswerIndex(-1)
+      )
     }, 200)
   }
 
