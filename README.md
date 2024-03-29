@@ -66,11 +66,14 @@ npm start
 # OR using Yarn
 yarn start
 ```
-
 ## Step 2: Start your Application
 
-### Open Expo Go app on your mobile device and scan the QR code from the terminal to run the app
+1. Install the Expo Go app on your mobile device from the App Store (iOS) or Google Play Store (Android).
+2. After installing Expo Go, open the app.
+3. Use your device's camera to scan the QR code displayed in the terminal when you run your Expo project. **_Make sure you're using Expo Go by pressing 's' when prompted._**
+4. Expo Go will load your project, and you'll be able to interact with it on your mobile device.
 
+Make sure your mobile device is connected to the same network as your development environment. This allows Expo Go to communicate with the Expo CLI running on your computer and load your app.
 
 
 ## Congratulations! :tada:
