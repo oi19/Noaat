@@ -1,7 +1,5 @@
 # React Native expo + Typescript
 
-Task in a servey  mobile App
-
 ## Setup and Run Instructions
 
 ### Prerequisites
