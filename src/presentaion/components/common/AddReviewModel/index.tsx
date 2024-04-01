@@ -72,7 +72,7 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   const onSendReview = () => {
     if (validate()) {
       onCompletion({
-        description: textInputValue.trim(),
+        description: textInputValue?.trim(),
         tags: selectedTags,
       })
     }
