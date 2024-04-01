@@ -5,8 +5,6 @@ import { isIos } from "../../../../shared/helpers/utils"
 import { SCREEN_WIDTH } from "../../../../shared/styles/dimensions"
 import { isRTL } from "../../../../infrastructure/localization/i18n-config"
 import { selectedAnswerProps } from "../../../screens/ServeyScreen/ServeyScreen"
-import { Spacing } from "../../../../shared/styles"
-import ProgressBar from "../../shared/ProgressBar/ProgressBar"
 import ServeyItem from "../ServeyItem/ServeyItem"
 
 interface ServeyListProps {

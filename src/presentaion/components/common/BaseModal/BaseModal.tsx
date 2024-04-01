@@ -1,5 +1,6 @@
 import React, { FC, memo, RefObject } from "react"
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
+
 import { Easing } from "react-native-reanimated"
 import { View, ViewProps, ViewStyle } from "react-native"
 import styles from "./styles"
@@ -12,10 +13,12 @@ import { isRTL } from "../../../../infrastructure/localization/i18n-config"
 const BaseModal: FC<
   ViewProps & {
     forwardRef: RefObject<BottomSheetModal>
+    modalKeyName?: string
     snapPoints?: Array<number | string>
     title?: string
     onLeftPress?: () => void
     leftButtonText?: string
+    dismissalSource?: string
     onDismiss?: () => void
     onBackgroundPress?: () => void
     backgroundStyle?: ViewStyle
@@ -24,11 +27,13 @@ const BaseModal: FC<
   }
 > = ({
   forwardRef,
+  modalKeyName,
   snapPoints,
   title,
   onLeftPress,
   leftButtonText,
   onDismiss,
+  dismissalSource,
   backgroundStyle,
   enableDrag = true,
   titleIcon,
@@ -49,6 +54,7 @@ const BaseModal: FC<
     <BottomSheetModal
       android_keyboardInputMode="adjustResize"
       keyboardBehavior="interactive"
+      name={modalKeyName}
       onDismiss={onDismiss}
       enableContentPanningGesture={enableDrag}
       enablePanDownToClose={true}

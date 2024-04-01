@@ -42,16 +42,21 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   onCompletion,
   onCancel,
 }) => {
-  const description = questionAnswer?.description ?? ""
   const tags = questionAnswer?.tags ?? []
-  const [selectedTags, setSelectedTags] = useState<number[]>(tags)
-  const [textInputValue, setTextInputValue] = useState<string>(description)
-  const [isTagErrorVisible, setTagErrorVisible] = useState<boolean>(false)
-  const [isTextInputVisible, setTextInputVisible] = useState<boolean>(false)
+  const description = questionAnswer?.description ?? ""
   const [snapPoints, setSnapPoints] = useState<Array<number | string>>(["50%"])
+  const [isTagErrorVisible, setTagErrorVisible] = useState<boolean>(false)
+  const [selectedTags, setSelectedTags] = useState<number[]>([])
+  const [textInputValue, setTextInputValue] = useState<string>("")
+  const [dismissalSource, setDismissalSource] = useState<"cancel" | "submit">(
+    "cancel"
+  )
+  const [isTextInputVisible, setTextInputVisible] = useState<boolean>(
+    questionAnswer?.description ? true : false
+  )
 
   useEffect(() => {
-    console.log(questionAnswer)
+    setDismissalSource("cancel")
     setSelectedTags(tags)
     setTextInputValue(description)
     toggleTextInput(description ? true : false)
@@ -69,13 +74,11 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     setSnapPoints(isVisible === false ? ["50%"] : ["65%"])
   }, [])
 
-  const onSendReview = () => {
-    if (validate()) {
-      onCompletion({
-        description: textInputValue?.trim(),
-        tags: selectedTags,
-      })
-    }
+  const onSendReviewHandler = () => {
+    onCompletion({
+      description: textInputValue?.trim(),
+      tags: selectedTags,
+    })
   }
 
   const validate = () => {
@@ -86,7 +89,7 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     return true
   }
 
-  const onCancelButtonPressed = () => {
+  const onCancelHandler = () => {
     Keyboard.dismiss()
     onCancel()
     setTagErrorVisible(false)
@@ -103,10 +106,31 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     setTextInputValue(description)
   }
 
+  const onCloseHandler = (dismissalValue: "cancel" | "submit") => {
+    if (dismissalSource === dismissalValue) {
+      forwardRef.current.close()
+    } else {
+      setDismissalSource(dismissalValue)
+    }
+  }
+
+  useEffect(() => {
+    forwardRef.current?.close()
+  }, [dismissalSource])
+
   return (
     <BaseModal
       forwardRef={forwardRef}
-      onBackgroundPress={onCancelButtonPressed}
+      modalKeyName="addReviewModal"
+      // onBackgroundPress={() => onCloseHandler("cancel")}
+      dismissalSource={dismissalSource}
+      onDismiss={
+        dismissalSource === "cancel"
+          ? onCancelHandler
+          : dismissalSource === "submit"
+          ? onSendReviewHandler
+          : null
+      }
       enableDrag={true}
       snapPoints={snapPoints}
       backgroundStyle={{
@@ -131,14 +155,16 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
               iconName="close"
               iconStyle={{ color: Colors.PRIMARY }}
               style={{ paddingHorizontal: Spacing.S20 }}
-              onPress={onCancelButtonPressed}
+              onPress={() => {
+                onCloseHandler("cancel")
+              }}
             />
           </View>
           <TagList
             data={data}
             selectedTags={selectedTags}
             onSelectTags={handleTagPress}
-            isTagErrorVisible={isTagErrorVisible}
+            isErrorVisible={isTagErrorVisible}
           />
           {!isTextInputVisible ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -176,7 +202,11 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
             text={translate("Common.sendReview")}
             style={{ alignSelf: "center", width: "100%" }}
             containerStyle={{ marginHorizontal: Spacing.S20 }}
-            onPress={onSendReview}
+            onPress={() => {
+              if (validate()) {
+                onCloseHandler("submit")
+              }
+            }}
           />
         </View>
       </KeyboardAwareScrollView>

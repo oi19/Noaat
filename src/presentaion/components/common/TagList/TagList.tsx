@@ -11,15 +11,17 @@ interface Tag {
 
 interface TagListProps {
   data: Tag[]
-  selectedTags: number[]
-  isTagErrorVisible: boolean
+  selectedTags: number[] 
+  errorMessage?: string
+  isErrorVisible?: boolean
   onSelectTags: (filteredSelectedTags: number[]) => void
 }
 
 const TagList: React.FC<TagListProps> = ({
   data,
   selectedTags,
-  isTagErrorVisible,
+  errorMessage,
+  isErrorVisible,
   onSelectTags,
 }) => {
   const handleTagPress = (id: number) => {
@@ -35,7 +37,7 @@ const TagList: React.FC<TagListProps> = ({
   const _renderTagItem = () => {
     return (
       <View style={styles.tagsListContainer}>
-        {data.map((tag: Tag) => (
+        {data?.map((tag: Tag) => (
           <TouchableOpacity
             key={"tageItem" + tag.id}
             style={[
@@ -76,9 +78,9 @@ const TagList: React.FC<TagListProps> = ({
 
   return (
     <View>
-      {isTagErrorVisible ? (
+      {errorMessage || isErrorVisible ? (
         <Text style={{ marginStart: Spacing.S20 }} color="RED">
-          at least 1 tag is required
+          {errorMessage || "At least one Tag is required"}
         </Text>
       ) : null}
       {_renderTagItem()}

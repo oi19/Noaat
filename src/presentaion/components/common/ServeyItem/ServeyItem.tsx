@@ -34,11 +34,7 @@ const ServeyItem: React.FC<serveyItemProps> = ({
   const [previousAnswerIndex, setPreviousAnswerIndex] = useState<number>(-1)
 
   const openReviewModal = () => {
-    reviewModalRef.current?.present()
-  }
-
-  const closeReviewModal = () => {
-    reviewModalRef.current?.close()
+    reviewModalRef.current?.present(questionAnswer)
   }
 
   const onAnswerButtonPressed = (selectedButtonIndex: number) => {
@@ -58,25 +54,17 @@ const ServeyItem: React.FC<serveyItemProps> = ({
   }
 
   const onSubmitReview = (review: selectedAnswerBodyProps | null) => {
-    closeReviewModal()
-    console.log(review)
-
-    setTimeout(() => {
-      onCompletion(isLastItem, {
-        [questionIndex]: {
-          answerId: selectedAnswerIndex,
-          tags: review.tags,
-          description: review?.description !== "" ? review?.description : null,
-        },
-      })
-    }, 400)
+    onCompletion(isLastItem, {
+      [questionIndex]: {
+        answerId: selectedAnswerIndex,
+        tags: review.tags,
+        description: review?.description !== "" ? review?.description : null,
+      },
+    })
   }
 
   const onCancel = () => {
     setSelectedAnswerIndex(previousAnswerIndex) // Restore the previous index on cancellation
-    setTimeout(() => {
-      closeReviewModal()
-    }, 300)
   }
 
   const _renderAnswerButton = (
