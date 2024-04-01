@@ -1,19 +1,13 @@
 import React, { FC, memo, RefObject } from "react"
-import {
-  BottomSheetBackdrop,
-  BottomSheetModal,
-  BottomSheetProps,
-} from "@gorhom/bottom-sheet"
+import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { Easing } from "react-native-reanimated"
-import { Platform, View, ViewProps, ViewStyle } from "react-native"
+import { View, ViewProps, ViewStyle } from "react-native"
 import styles from "./styles"
 import { IconsName } from "../../../../assets/svgs"
 import Button from "../../shared/Button/Button"
 import Text from "../../shared/Text/Text"
-import { Colors, Spacing } from "../../../../shared/styles/index"
+import { Spacing } from "../../../../shared/styles/index"
 import { isRTL } from "../../../../infrastructure/localization/i18n-config"
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet"
 
 const BaseModal: FC<
   ViewProps & {

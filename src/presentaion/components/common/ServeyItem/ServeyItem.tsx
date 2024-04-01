@@ -80,14 +80,14 @@ const ServeyItem: React.FC<serveyItemProps> = ({
         },
         () => setSelectedAnswerIndex(-1)
       )
-    }, 200)
+    }, 400)
   }
 
   const onCancel = () => {
     setSelectedAnswerIndex(previousAnswerIndex) // Restore the previous index on cancellation
     setTimeout(() => {
       closeReviewModal()
-    }, 200)
+    }, 300)
   }
 
   const _renderAnswerButton = (

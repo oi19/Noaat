@@ -105,14 +105,8 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   }
 
   const checkPreviousData = () => {
-    const clearSelectedTags =
-      selectedTags?.length == 0 ||
-      questionAnswer?.tags === undefined ||
-      questionAnswer?.tags?.length == 0
-    if (clearSelectedTags) {
-      setSelectedTags([])
-      reset()
-    }
+    setSelectedTags(questionAnswer?.tags ?? [])
+    setValue("tags", questionAnswer?.tags ?? [])
   }
 
   return (
