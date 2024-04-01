@@ -45,13 +45,12 @@ const ServeyScreen: React.FC = () => {
 
   const closeSuccessModal = () => {
     setCurrentIndex(0)
-    setAnswers({})
     setTimeout(() => {
       successModelRef.current.close()
     }, 300)
   }
 
-  const onSubmitReview = (onCompletion?: () => void) => {
+  const onSubmitReview = () => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
@@ -61,11 +60,10 @@ const ServeyScreen: React.FC = () => {
 
   const onAnswerButtonPressed = (
     isLastItem: boolean,
-    currentAnswer: selectedAnswerProps,
-    lastItemHandler: () => void
+    currentAnswer: selectedAnswerProps
   ) => {
     if (isLastItem) {
-      onSubmitReview(lastItemHandler)
+      onSubmitReview()
     } else {
       setCurrentIndex(currentIndex + 1)
     }
@@ -98,7 +96,6 @@ const ServeyScreen: React.FC = () => {
           totalSteps={data.length}
         />
       </View>
-
       <ServeyList
         forwardRef={flatListRef}
         questionList={data}
@@ -106,12 +103,6 @@ const ServeyScreen: React.FC = () => {
         onCompletion={onAnswerButtonPressed}
         answers={answers}
       />
-      {/* <Button
-        containerStyle={styles.nextBottomContainer}
-        type="standard"
-        onPress={onButtonPressed}
-        text={lastItem ? translate("Common.submit") : translate("Common.next")}
-      /> */}
       <SuccessModel
         forwardRef={successModelRef}
         onContinuePress={closeSuccessModal}

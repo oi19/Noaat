@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from "react"
+import React, { RefObject, useCallback, useEffect, useState } from "react"
 import {
   View,
   LayoutAnimation,
@@ -13,15 +13,12 @@ import { Colors, Spacing } from "../../../../shared/styles"
 import { scale } from "../../../../shared/styles/dimensions"
 import Button from "../../shared/Button/Button"
 import Text from "../../shared/Text/Text"
-import { ControlledInput } from "../../shared/Input/Input"
+import Input from "../../shared/Input/Input"
 import BaseModal from "../BaseModal/BaseModal"
 import { styles } from "./styles"
 import { taglist as data } from "./data"
 import { selectedAnswerBodyProps } from "../../../screens/ServeyScreen/ServeyScreen"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { ReviewSchema } from "../../../../shared/helpers/validationSchema"
 import TagList from "../TagList/TagList"
 
 type AddReviewModelModelProps = {
@@ -45,52 +42,44 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
   onCompletion,
   onCancel,
 }) => {
-  const [selectedTags, setSelectedTags] = useState<number[]>([])
+  const description = questionAnswer?.description ?? ""
+  const tags = questionAnswer?.tags ?? []
+  const [selectedTags, setSelectedTags] = useState<number[]>(tags)
+  const [textInputValue, setTextInputValue] = useState<string>(description)
   const [isTagErrorVisible, setTagErrorVisible] = useState<boolean>(false)
   const [isTextInputVisible, setTextInputVisible] = useState<boolean>(false)
   const [snapPoints, setSnapPoints] = useState<Array<number | string>>(["50%"])
 
-  const { control, setValue, getValues, clearErrors, reset } = useForm({
-    resolver: yupResolver(ReviewSchema),
-    defaultValues: {
-      review: questionAnswer?.description ?? "",
-      tags: questionAnswer?.tags ?? [],
-    },
-  })
-
   useEffect(() => {
     console.log(questionAnswer)
-    setSelectedTags(questionAnswer?.tags ?? [])
-    setValue("tags", questionAnswer?.tags ?? [])
-    setValue("review", questionAnswer?.description ?? "")
+    setSelectedTags(tags)
+    setTextInputValue(description)
+    toggleTextInput(description ? true : false)
   }, [questionAnswer])
 
   const handleTagPress = (filteredSelectedTags: number[]) => {
-    clearErrors("tags")
     setTagErrorVisible(false)
     setSelectedTags(filteredSelectedTags)
-    setValue("tags", filteredSelectedTags)
   }
 
-  const toggleTextInput = () => {
+  const toggleTextInput = useCallback((isVisible: boolean) => {
     Keyboard.dismiss()
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-    setTextInputVisible((prev) => !prev)
-    setSnapPoints((prev) => (prev[0] === "50%" ? ["60%"] : ["50%"]))
-  }
+    setTextInputVisible(isVisible)
+    setSnapPoints(isVisible === false ? ["50%"] : ["65%"])
+  }, [])
 
   const onSendReview = () => {
     if (validate()) {
-      console.log(getValues())
       onCompletion({
-        description: getValues("review"),
-        tags: getValues("tags"),
+        description: textInputValue.trim(),
+        tags: selectedTags,
       })
     }
   }
 
   const validate = () => {
-    if (getValues("tags").length === 0) {
+    if (selectedTags?.length === 0) {
       setTagErrorVisible(true)
       return false
     }
@@ -99,14 +88,19 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
 
   const onCancelButtonPressed = () => {
     Keyboard.dismiss()
+    onCancel()
     setTagErrorVisible(false)
     checkPreviousData()
-    onCancel()
+    if (description) {
+      toggleTextInput(true)
+    } else {
+      toggleTextInput(false)
+    }
   }
 
   const checkPreviousData = () => {
-    setSelectedTags(questionAnswer?.tags ?? [])
-    setValue("tags", questionAnswer?.tags ?? [])
+    setSelectedTags(tags)
+    setTextInputValue(description)
   }
 
   return (
@@ -114,7 +108,6 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
       forwardRef={forwardRef}
       onBackgroundPress={onCancelButtonPressed}
       enableDrag={true}
-      topArrow
       snapPoints={snapPoints}
       backgroundStyle={{
         backgroundColor: Colors.GRAY_EEEEEE,
@@ -123,9 +116,11 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
     >
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
+        keyboardDismissMode="interactive"
+        automaticallyAdjustKeyboardInsets={true}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid={true}
-        extraScrollHeight={Platform.select({ ios: 200, android: 60 })}
+        extraScrollHeight={Platform.select({ ios: 250, android: 60 })}
       >
         <View style={styles.container}>
           <View style={styles.titleQuestionContainer}>
@@ -147,24 +142,31 @@ const AddReviewModel: React.FC<AddReviewModelModelProps> = ({
           />
           {!isTextInputVisible ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <TouchableOpacity onPress={toggleTextInput}>
+              <TouchableOpacity onPress={() => toggleTextInput(true)}>
                 <Text style={styles.shareOpinionText}>Tell Us More</Text>
               </TouchableOpacity>
               <Text>(optional)</Text>
             </View>
           ) : null}
-
-          {isTextInputVisible ? (
-            <ControlledInput
-              fieldName="review"
-              control={control}
+          {isTextInputVisible || description ? (
+            <Input
+              defaultValue={textInputValue}
               multiline
               numberOfLines={4}
               placeholder={"Write here..."}
               textAlignVertical="top"
+              keyboardAppearance="default"
+              returnKeyType="done"
+              enterKeyHint="done"
+              dismissKeyboard={true}
               inputContainerStyle={styles.inputContainerStyle}
               inputStyle={styles.problemInputStyle}
-              // inputRef={problemInputRef}
+              onChangeText={(text: string) => setTextInputValue(text)}
+              onKeyPress={({ nativeEvent }) => {
+                if (nativeEvent.key === "Enter") {
+                  Keyboard.dismiss()
+                }
+              }}
             />
           ) : null}
 

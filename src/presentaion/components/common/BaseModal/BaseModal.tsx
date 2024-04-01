@@ -21,7 +21,6 @@ const BaseModal: FC<
     backgroundStyle?: ViewStyle
     enableDrag?: boolean
     titleIcon?: IconsName
-    topArrow?: boolean
   }
 > = ({
   forwardRef,
@@ -33,7 +32,6 @@ const BaseModal: FC<
   backgroundStyle,
   enableDrag = true,
   titleIcon,
-  topArrow,
   onBackgroundPress,
   ...props
 }) => {
@@ -49,6 +47,8 @@ const BaseModal: FC<
 
   return (
     <BottomSheetModal
+      android_keyboardInputMode="adjustResize"
+      keyboardBehavior="interactive"
       onDismiss={onDismiss}
       enableContentPanningGesture={enableDrag}
       enablePanDownToClose={true}
@@ -71,13 +71,7 @@ const BaseModal: FC<
       backgroundStyle={[styles.backgroundStyle, backgroundStyle]}
       snapPoints={snapPoints || ["50%"]}
     >
-      {topArrow ? (
-        <Button
-          // iconName="arrow"
-          // iconStyle={{ rotate: "top", color: Colors.PRIMARY }}
-          containerStyle={{ padding: Spacing.S8 }}
-        />
-      ) : null}
+      <View style={styles.horizontalLine} />
       {title && (
         <View style={styles.header}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>

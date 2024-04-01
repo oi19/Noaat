@@ -17,11 +17,7 @@ interface serveyItemProps {
   isLastItem: boolean
   questionIndex: number
   questionAnswer: selectedAnswerBodyProps
-  onCompletion: (
-    isLastItem: boolean,
-    answerBody: selectedAnswerProps,
-    lastItemHandler
-  ) => void
+  onCompletion: (isLastItem: boolean, answerBody: selectedAnswerProps) => void
 }
 
 const ServeyItem: React.FC<serveyItemProps> = ({
@@ -51,17 +47,13 @@ const ServeyItem: React.FC<serveyItemProps> = ({
     if (selectedButtonIndex === 0 || selectedButtonIndex === 1) {
       openReviewModal()
     } else {
-      onCompletion(
-        isLastItem,
-        {
-          [questionIndex]: {
-            answerId: selectedButtonIndex,
-            description: null,
-            tags: [],
-          },
+      onCompletion(isLastItem, {
+        [questionIndex]: {
+          answerId: selectedButtonIndex,
+          description: null,
+          tags: [],
         },
-        () => setSelectedAnswerIndex(-1)
-      )
+      })
     }
   }
 
@@ -70,16 +62,13 @@ const ServeyItem: React.FC<serveyItemProps> = ({
     console.log(review)
 
     setTimeout(() => {
-      onCompletion(
-        isLastItem,
-        {
-          [questionIndex]: {
-            answerId: selectedAnswerIndex,
-            ...review,
-          },
+      onCompletion(isLastItem, {
+        [questionIndex]: {
+          answerId: selectedAnswerIndex,
+          tags: review.tags,
+          description: review?.description !== "" ? review?.description : null,
         },
-        () => setSelectedAnswerIndex(-1)
-      )
+      })
     }, 400)
   }
 

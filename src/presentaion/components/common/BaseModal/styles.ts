@@ -26,5 +26,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
+  horizontalLine: {
+    height: 6,
+    backgroundColor: Colors.GRAY_CBCBCB,
+    width: Spacing.S70,
+    alignSelf: "center",
+    borderRadius: 20,
+    marginVertical: Spacing.S20,
+  },
 })
 export default styles
